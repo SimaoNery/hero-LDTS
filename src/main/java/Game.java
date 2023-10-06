@@ -1,5 +1,7 @@
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
@@ -12,6 +14,7 @@ import java.io.IOException;
 public class Game {
     private Screen screen;
     private Arena arena;
+
     public Game() {
         try {
             TerminalSize terminalSize = new TerminalSize(100, 50);
@@ -32,7 +35,13 @@ public class Game {
     }
     private void draw() throws IOException{
         screen.clear();
-        arena.draw(screen);
+
+        TextGraphics graphics = screen.newTextGraphics();
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(100, 100), ' ');
+
+
+        arena.draw(graphics);
         screen.refresh();
     }
 

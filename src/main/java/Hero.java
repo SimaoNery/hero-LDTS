@@ -1,5 +1,7 @@
-import com.googlecode.lanterna.TextCharacter;
-import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 
 public class Hero {
 
@@ -14,10 +16,12 @@ public class Hero {
         this.position = position;
     }
 
-    public void draw(Screen screen){
-        int x = position.getX();
-        int y = position.getY();
-        screen.setCharacter(x, y, new TextCharacter('X'));
+    public void draw(TextGraphics graphics){
+        graphics.setForegroundColor(TextColor.Factory.fromString("#FFCC33"));
+
+        graphics.enableModifiers(SGR.BOLD);
+
+        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
     }
 
     public Position moveUp(){

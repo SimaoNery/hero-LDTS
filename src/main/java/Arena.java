@@ -1,3 +1,4 @@
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
 
@@ -25,8 +26,8 @@ public class Arena {
         this.height = height;
         this.hero = new Hero(width/2, height/2);
     }
-    public void draw(Screen screen){
-        hero.draw(screen);
+    public void draw(TextGraphics graphics){
+        hero.draw(graphics);
     }
 
     public boolean canHeroMove(Position position) {
