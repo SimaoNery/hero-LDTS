@@ -53,6 +53,10 @@ public class Game {
                break;
            }
            arena.processKey(key);
+           arena.moveMonsters();
+           arena.verifyMonsterCollisions();
+           arena.retrieveCoins();
        }
+       screen.close();
     }
 }

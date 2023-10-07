@@ -11,6 +11,7 @@ public class Arena {
     private Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
 
 
     public Arena(int width, int height){
@@ -19,6 +20,7 @@ public class Arena {
         this.hero = new Hero(width/2, height/2);
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonsters();
     }
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
@@ -49,6 +51,24 @@ public class Arena {
         return Coins;
     }
 
+    private List<Monster> createMonsters() {
+        Random random = new Random();
+        ArrayList<Monster> generatedMonsters = new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+            int monsterX, monsterY;
+            do {
+                monsterX = random.nextInt(width - 2) + 1;
+                monsterY = random.nextInt(height - 2) + 1;
+            } while (isOverlappingWithHero(monsterX, monsterY) || isOverlappingWithWall(monsterX, monsterY));
+
+            generatedMonsters.add(new Monster(monsterX, monsterY));
+        }
+
+        return generatedMonsters;
+    }
+
+
     private boolean isOverlappingWithHero(int x, int y) {
         return hero.getPosition().getX() == x && hero.getPosition().getY() == y;
     }
@@ -69,6 +89,9 @@ public class Arena {
         }
         for (Coin coin : coins) {
             coin.draw(graphics);
+        }
+        for (Monster monster : monsters) {
+            monster.draw(graphics);
         }
         hero.draw(graphics);
     }
@@ -115,7 +138,6 @@ public class Arena {
             default:
                 break;
         }
-        retrieveCoins();
     }
 
     public void retrieveCoins() {
@@ -129,5 +151,42 @@ public class Arena {
         }
     }
 
+
+    public void moveMonsters() {
+        for (Monster monster : monsters) {
+            Position newPosition = monster.move();
+            if (canMonsterMove(newPosition)) {
+                monster.setPosition(newPosition);
+            }
+        }
+    }
+
+    public void verifyMonsterCollisions() {
+        for (Monster monster : monsters) {
+            if (hero.getPosition().equals(monster.getPosition())) {
+                System.out.println("Game over! The hero touched a monster.");
+                System.exit(0);
+            }
+        }
+    }
+
+    public boolean canMonsterMove(Position position) {
+        int newX = position.getX();
+        int newY = position.getY();
+        if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+            for (Wall wall : walls) {
+                if (wall.getPosition().equals(position)) {
+                    return false;
+                }
+            }
+            for (Monster monster : monsters) {
+                if (monster.getPosition().equals(position)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
 }
