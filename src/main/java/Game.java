@@ -37,7 +37,7 @@ public class Game {
         screen.clear();
 
         TextGraphics graphics = screen.newTextGraphics();
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#008000"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(100, 100), ' ');
 
 

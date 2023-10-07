@@ -1,35 +1,24 @@
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.screen.Screen;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Arena {
     private int width;
     private int height;
     private Hero hero;
     private List<Wall> walls;
+    private List<Coin> coins;
 
-    public int get_Width(){
-        return this.width;
-    }
-    public int get_Height(){
-        return this.height;
-    }
-    public void set_Width(int width){
-        this.width = width;
-    }
-    public void set_Height(int height){
-        this.height = height;
-    }
 
     public Arena(int width, int height){
         this.width = width;
         this.height = height;
         this.hero = new Hero(width/2, height/2);
         this.walls = createWalls();
+        this.coins = createCoins();
     }
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
@@ -43,10 +32,43 @@ public class Arena {
         }
         return walls;
     }
+    private List<Coin> createCoins(){
+        Random random = new Random();
+        ArrayList<Coin> Coins = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            int coinX, coinY;
+            do {
+                coinX = random.nextInt(width - 2) + 1;
+                coinY = random.nextInt(height - 2) + 1;
+            }
+            while (isOverlappingWithHero(coinX, coinY) || isOverlappingWithWall(coinX, coinY));
+            Coins.add(new Coin(coinX, coinY));
+        }
+
+        return Coins;
+    }
+
+    private boolean isOverlappingWithHero(int x, int y) {
+        return hero.getPosition().getX() == x && hero.getPosition().getY() == y;
+    }
+
+    private boolean isOverlappingWithWall(int x, int y) {
+        for (Wall wall : walls) {
+            if (wall.getPosition().getX() == x && wall.getPosition().getY() == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void draw(TextGraphics graphics){
         for(Wall wall : walls){
             wall.draw(graphics);
+        }
+        for (Coin coin : coins) {
+            coin.draw(graphics);
         }
         hero.draw(graphics);
     }
@@ -93,6 +115,19 @@ public class Arena {
             default:
                 break;
         }
+        retrieveCoins();
     }
+
+    public void retrieveCoins() {
+        Position heroPosition = hero.getPosition();
+        for (int i = 0; i < coins.size(); i++) {
+            Coin coin = coins.get(i);
+            if (heroPosition.equals(coin.getPosition())) {
+                coins.remove(i);
+                break;
+            }
+        }
+    }
+
 
 }

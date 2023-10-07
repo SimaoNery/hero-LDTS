@@ -9,7 +9,7 @@ public class Hero extends Element{
     }
 
 @Override public void draw(TextGraphics graphics){
-        graphics.setForegroundColor(TextColor.Factory.fromString("#FFCC33"));
+        graphics.setForegroundColor(TextColor.Factory.fromString("#0000FF"));
 
         graphics.enableModifiers(SGR.BOLD);
 
